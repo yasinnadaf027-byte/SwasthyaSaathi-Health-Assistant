@@ -3,13 +3,23 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Safety-first multilingual rural health assistant API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: dashboard
+    description: User dashboard data
+  - name: assessments
+    description: Symptom assessment workflows
+  - name: profile
+    description: Patient-reported profile data
+  - name: reminders
+    description: User-configured reminders
+  - name: facilities
+    description: Healthcare facility discovery
 paths:
   /healthz:
     get:
@@ -24,7 +34,231 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [dashboard]
+      summary: Get dashboard overview
+      responses:
+        "200":
+          description: Dashboard overview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dashboard"
+  /profile:
+    get:
+      operationId: getProfile
+      tags: [profile]
+      summary: Get patient profile
+      responses:
+        "200":
+          description: Patient profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+    put:
+      operationId: updateProfile
+      tags: [profile]
+      summary: Update patient profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfileInput"
+      responses:
+        "200":
+          description: Updated patient profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+  /assessments:
+    get:
+      operationId: listAssessments
+      tags: [assessments]
+      summary: List recent assessments
+      responses:
+        "200":
+          description: Recent assessments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Assessment"
+    post:
+      operationId: createAssessment
+      tags: [assessments]
+      summary: Create a symptom assessment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssessmentInput"
+      responses:
+        "201":
+          description: Created assessment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Assessment"
+  /assessments/{id}:
+    get:
+      operationId: getAssessment
+      tags: [assessments]
+      summary: Get one assessment
+      parameters:
+        - $ref: "#/components/parameters/AssessmentId"
+      responses:
+        "200":
+          description: Assessment details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Assessment"
+        "404":
+          description: Assessment not found
+    delete:
+      operationId: deleteAssessment
+      tags: [assessments]
+      summary: Delete one assessment
+      parameters:
+        - $ref: "#/components/parameters/AssessmentId"
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Assessment not found
+  /ai/analyze-symptoms:
+    post:
+      operationId: analyzeSymptoms
+      tags: [assessments]
+      summary: Analyze symptoms with deterministic safety screening
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SymptomAnalysisInput"
+      responses:
+        "200":
+          description: Safety-focused symptom analysis
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SymptomAnalysis"
+  /ai/generate-summary:
+    post:
+      operationId: generateDoctorSummary
+      tags: [assessments]
+      summary: Generate a doctor-ready patient-reported summary
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SummaryInput"
+      responses:
+        "200":
+          description: Doctor summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DoctorSummary"
+  /reminders:
+    get:
+      operationId: listReminders
+      tags: [reminders]
+      summary: List reminders
+      responses:
+        "200":
+          description: Reminder list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Reminder"
+    post:
+      operationId: createReminder
+      tags: [reminders]
+      summary: Create a user-configured reminder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReminderInput"
+      responses:
+        "201":
+          description: Created reminder
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reminder"
+  /reminders/{id}:
+    delete:
+      operationId: deleteReminder
+      tags: [reminders]
+      summary: Delete a reminder
+      parameters:
+        - $ref: "#/components/parameters/ReminderId"
+      responses:
+        "204":
+          description: Deleted
+  /facilities/nearby:
+    get:
+      operationId: getNearbyFacilities
+      tags: [facilities]
+      summary: Find nearby healthcare facilities
+      parameters:
+        - name: latitude
+          in: query
+          required: false
+          schema:
+            type: number
+        - name: longitude
+          in: query
+          required: false
+          schema:
+            type: number
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: emergency
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Nearby facilities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Facility"
 components:
+  parameters:
+    AssessmentId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    ReminderId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
     HealthStatus:
       type: object
@@ -33,4 +267,233 @@ components:
           type: string
       required:
         - status
+    RiskLevel:
+      type: string
+      enum: [low, medium, emergency]
+    Language:
+      type: string
+      enum: [en, hi, mr]
+    Profile:
+      type: object
+      required: [preferredLanguage]
+      properties:
+        preferredLanguage:
+          $ref: "#/components/schemas/Language"
+        age:
+          type: ["integer", "null"]
+        sex:
+          type: ["string", "null"]
+        pregnancyStatus:
+          type: ["string", "null"]
+        emergencyContactName:
+          type: ["string", "null"]
+        emergencyContactPhone:
+          type: ["string", "null"]
+        allergies:
+          type: array
+          items: { type: string }
+        chronicConditions:
+          type: array
+          items: { type: string }
+        currentMedications:
+          type: array
+          items: { type: string }
+        accessibility:
+          type: object
+          additionalProperties: true
+    ProfileInput:
+      type: object
+      properties:
+        preferredLanguage:
+          $ref: "#/components/schemas/Language"
+        age:
+          type: ["integer", "null"]
+        sex:
+          type: ["string", "null"]
+        pregnancyStatus:
+          type: ["string", "null"]
+        emergencyContactName:
+          type: ["string", "null"]
+        emergencyContactPhone:
+          type: ["string", "null"]
+        allergies:
+          type: array
+          items: { type: string }
+        chronicConditions:
+          type: array
+          items: { type: string }
+        currentMedications:
+          type: array
+          items: { type: string }
+        accessibility:
+          type: object
+          additionalProperties: true
+    AssessmentInput:
+      type: object
+      required: [language, chiefComplaint, symptomData]
+      properties:
+        language:
+          $ref: "#/components/schemas/Language"
+        chiefComplaint:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        symptomData:
+          type: object
+          additionalProperties: true
+        riskLevel:
+          $ref: "#/components/schemas/RiskLevel"
+        riskReasons:
+          type: array
+          items: { type: string }
+        redFlags:
+          type: array
+          items: { type: string }
+        recommendedAction:
+          type: string
+        aiSummary:
+          type: string
+    Assessment:
+      allOf:
+        - $ref: "#/components/schemas/AssessmentInput"
+        - type: object
+          required: [id, createdAt]
+          properties:
+            id:
+              type: string
+            createdAt:
+              type: string
+    SymptomAnalysisInput:
+      type: object
+      required: [message, language]
+      properties:
+        message:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        language:
+          $ref: "#/components/schemas/Language"
+        context:
+          type: object
+          additionalProperties: true
+    SymptomAnalysis:
+      type: object
+      required: [riskLevel, redFlags, reasoningSummary, recommendedAction, seekEmergencyCare, followUpQuestions]
+      properties:
+        riskLevel:
+          $ref: "#/components/schemas/RiskLevel"
+        redFlags:
+          type: array
+          items: { type: string }
+        reasoningSummary:
+          type: string
+        recommendedAction:
+          type: string
+        seekEmergencyCare:
+          type: boolean
+        followUpQuestions:
+          type: array
+          items: { type: string }
+        extractedSymptoms:
+          type: array
+          items: { type: string }
+    SummaryInput:
+      type: object
+      required: [language, assessment]
+      properties:
+        language:
+          $ref: "#/components/schemas/Language"
+        assessment:
+          $ref: "#/components/schemas/AssessmentInput"
+        profile:
+          $ref: "#/components/schemas/Profile"
+    DoctorSummary:
+      type: object
+      required: [disclaimer, text, riskLevel]
+      properties:
+        disclaimer:
+          type: string
+        text:
+          type: string
+        riskLevel:
+          $ref: "#/components/schemas/RiskLevel"
+        unknownInformation:
+          type: array
+          items: { type: string }
+    ReminderInput:
+      type: object
+      required: [title, type, schedule]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 120
+        type:
+          type: string
+          enum: [medication, appointment, follow-up]
+        dosage:
+          type: ["string", "null"]
+        schedule:
+          type: object
+          additionalProperties: true
+        startDate:
+          type: ["string", "null"]
+        endDate:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+    Reminder:
+      allOf:
+        - $ref: "#/components/schemas/ReminderInput"
+        - type: object
+          required: [id]
+          properties:
+            id:
+              type: string
+    Facility:
+      type: object
+      required: [id, name, type, address]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        address:
+          type: string
+        distanceKm:
+          type: ["number", "null"]
+        phone:
+          type: ["string", "null"]
+        openingInfo:
+          type: ["string", "null"]
+        emergencyAvailable:
+          type: ["boolean", "null"]
+        latitude:
+          type: ["number", "null"]
+        longitude:
+          type: ["number", "null"]
+        source:
+          type: string
+    Dashboard:
+      type: object
+      required: [recentAssessments, reminders, stats]
+      properties:
+        recentAssessments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Assessment"
+        reminders:
+          type: array
+          items:
+            $ref: "#/components/schemas/Reminder"
+        stats:
+          type: object
+          required: [assessments, activeReminders]
+          properties:
+            assessments:
+              type: integer
+            activeReminders:
+              type: integer
 

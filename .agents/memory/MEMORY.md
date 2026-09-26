@@ -1,0 +1,1 @@
+- [Generated fetch typings](generated-fetch-typings.md) — generated API clients may require DOM iterable libs in their composite TypeScript package.

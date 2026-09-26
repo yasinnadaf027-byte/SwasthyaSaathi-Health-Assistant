@@ -1,0 +1,1774 @@
+# SWASTHYASAATHI — AI-POWERED MULTILINGUAL RURAL HEALTH ASSISTANT
+
+## MASTER PROMPT FOR AI CODING AGENTS
+
+---
+
+# 1. HEADER & SYSTEM PERSONA ROLE
+
+You are an expert **Prompt Engineer, AI Systems Architect, Principal Full-Stack Engineer, Healthcare UX Designer, and Medical-Safety-Focused Software Architect**.
+
+Your task is to build a complete, production-quality, hackathon-ready web application named:
+
+**SwasthyaSaathi — Multilingual Rural Health Assistant**
+
+The application must help rural and underserved users:
+
+* Describe symptoms in their own language.
+* Use text or voice to communicate.
+* Understand whether their situation may require routine care, prompt medical attention, or emergency care.
+* Find nearby appropriate healthcare facilities.
+* Receive safe next-step guidance.
+* Prepare a concise summary that can be shown to a doctor.
+* Receive medication/follow-up reminders where explicitly configured by the user.
+* Work reasonably well in low-connectivity environments.
+
+The application MUST NOT claim to diagnose diseases, prescribe medicines, replace doctors, or provide definitive medical conclusions.
+
+You are responsible for implementing the entire application end-to-end, including:
+
+* Frontend
+* Backend
+* Database
+* Authentication
+* AI integration
+* Validation
+* Error handling
+* Security
+* Accessibility
+* Responsive UI
+* Healthcare safety guardrails
+* Demo data
+* Deployment configuration
+* Documentation
+
+Do not leave TODOs, fake functions, placeholder APIs, unfinished pages, or pseudocode.
+
+---
+
+# 2. CORE MISSION DIRECTIVE
+
+Build a trustworthy, multilingual, accessibility-first rural healthcare guidance platform.
+
+The core workflow is:
+
+**User speaks/types symptoms → System understands language → Structured questions → Safety-first risk assessment → Emergency detection → Appropriate care guidance → Nearby facility discovery → Doctor-ready summary**
+
+The system should prioritize:
+
+1. Patient safety
+2. Emergency recognition
+3. Clear communication
+4. Appropriate referral
+5. Accessibility
+6. Privacy
+7. Simplicity
+8. Multilingual support
+9. Explainability
+10. Reliable failure handling
+
+The application must never present an AI-generated medical conclusion as a confirmed diagnosis.
+
+Whenever the system is uncertain, it should explicitly communicate uncertainty and recommend appropriate professional medical evaluation.
+
+---
+
+# 3. PRODUCT GOAL
+
+Create a polished healthcare application that demonstrates how AI can improve access to healthcare information and referral guidance for rural users.
+
+The application should feel like a real product rather than a generic chatbot.
+
+Primary target users:
+
+* Rural patients
+* Elderly users
+* Users with limited digital literacy
+* Users who prefer regional languages
+* Pregnant users
+* Chronic-disease patients
+* Caregivers
+* Community health workers
+* Doctors receiving patient summaries
+
+Primary value proposition:
+
+> “SwasthyaSaathi helps people understand their symptoms, recognize possible warning signs, and reach the right healthcare facility in their preferred language — without pretending to replace a doctor.”
+
+---
+
+# 4. MANDATORY FEATURES
+
+## 4.1 Multilingual AI Health Assistant
+
+Support at minimum:
+
+* English
+* Hindi
+* Marathi
+
+Design the architecture so additional Indian languages can easily be added later.
+
+The user must be able to:
+
+* Type a message.
+* Use voice input.
+* Receive a text response.
+* Listen to the response through text-to-speech where supported.
+
+The interface must provide a visible language selector.
+
+AI responses must use the selected language.
+
+---
+
+## 4.2 Symptom Intake
+
+Create a structured symptom assessment workflow.
+
+Collect, where applicable:
+
+* Main symptom
+* Body location
+* Duration
+* Severity
+* Onset
+* Frequency
+* Associated symptoms
+* Age
+* Sex
+* Pregnancy status where relevant
+* Existing medical conditions
+* Current medications
+* Known allergies
+* Relevant recent events
+* Relevant risk factors
+
+Do not ask unnecessary questions.
+
+Questions should be adaptive.
+
+For example:
+
+If the user reports chest discomfort, ask relevant safety questions before providing general guidance.
+
+If the user reports a minor, short-duration symptom without warning signs, keep the flow concise.
+
+---
+
+## 4.3 Risk Assessment
+
+Implement a safety-first triage engine with three user-facing categories:
+
+### LOW / ROUTINE
+
+No obvious emergency warning signs detected from the available information.
+
+Suggested action:
+
+* Monitor symptoms.
+* Consider routine healthcare consultation if symptoms persist or worsen.
+* Provide general non-diagnostic self-care information only when appropriate.
+
+### MEDIUM / PROMPT CARE
+
+Potentially concerning symptoms or risk factors detected.
+
+Suggested action:
+
+* Recommend contacting a healthcare professional soon.
+* Provide appropriate referral guidance.
+* Explain which symptoms should trigger emergency escalation.
+
+### EMERGENCY
+
+Potential emergency warning signs detected.
+
+The UI must prominently instruct the user to seek emergency medical care immediately.
+
+Do not continue a long chatbot conversation before showing emergency guidance.
+
+The system must never falsely reassure a user when emergency symptoms are detected.
+
+---
+
+## 4.4 Emergency Red-Flag Detection
+
+Create a deterministic safety layer before or alongside the LLM.
+
+Include configurable red-flag patterns for examples such as:
+
+* Severe difficulty breathing
+* Severe chest pain or pressure
+* Loss of consciousness
+* New severe confusion
+* Sudden weakness or numbness
+* Sudden difficulty speaking
+* Severe uncontrolled bleeding
+* Seizure
+* Severe allergic reaction
+* Blue/grey lips or face
+* Severe dehydration signs
+* Serious injury
+* Suspected poisoning
+* Pregnancy-related emergency warning signs
+* Other configurable high-risk situations
+
+Do NOT rely exclusively on the LLM for emergency detection.
+
+The deterministic safety layer should be able to override ordinary AI responses.
+
+Emergency rules must be stored in a maintainable configuration/module.
+
+Do not provide dangerous treatment instructions.
+
+---
+
+## 4.5 Nearby Healthcare Facility Finder
+
+Provide a healthcare facility discovery experience.
+
+Facility categories:
+
+* Primary Health Centre
+* Community Health Centre
+* Government Hospital
+* Private Hospital
+* Clinic
+* Pharmacy
+* Diagnostic Centre
+* Ambulance/Emergency Service
+
+Display:
+
+* Facility name
+* Type
+* Distance where available
+* Address
+* Phone number where available
+* Opening information where available
+* Navigation action
+* Emergency availability where known
+
+Use a map provider abstraction so the application can support:
+
+* OpenStreetMap
+* Google Maps
+
+Do not fabricate facility information.
+
+If live location is unavailable, allow the user to manually select their location.
+
+---
+
+## 4.6 Doctor Summary Generator
+
+Generate a concise healthcare handoff summary containing:
+
+* Patient age
+* Sex if provided
+* Main complaint
+* Symptom onset
+* Duration
+* Severity
+* Associated symptoms
+* Relevant conditions
+* Current medications
+* Allergies
+* Pregnancy status where relevant
+* Important warning signs
+* AI-assessed urgency category
+* Questions that remain unanswered
+
+Clearly label the summary as:
+
+**AI-generated patient-reported summary — verify with a healthcare professional.**
+
+The doctor summary must not invent information.
+
+Unknown fields must be represented as unknown/not provided.
+
+---
+
+## 4.7 Medication Reminder
+
+Allow users to create reminders for medications or follow-ups.
+
+Important:
+
+The application must NOT decide which medicine a patient should take.
+
+Users may manually enter:
+
+* Medicine name
+* Dose as prescribed by clinician
+* Frequency
+* Reminder times
+* Start date
+* End date
+* Notes
+
+Display a safety notice:
+
+> “Medication details should match the prescription or instructions provided by your healthcare professional.”
+
+---
+
+## 4.8 Special Patient Modules
+
+Create modular support for:
+
+### Pregnancy
+
+Support:
+
+* Appointment reminders
+* General nutrition information
+* Vaccination/visit reminders
+* Warning-sign education
+* Healthcare facility referral
+
+Never provide individualized obstetric diagnosis.
+
+### Elderly Users
+
+Provide:
+
+* Larger UI
+* Voice-first interaction
+* Medication reminders
+* Caregiver-friendly summaries
+* Simplified navigation
+
+### Chronic Conditions
+
+Allow users to track conditions such as:
+
+* Diabetes
+* Hypertension
+* Asthma
+
+Only store patient-reported information.
+
+Do not modify treatment plans or medication doses.
+
+---
+
+## 4.9 Offline-Friendly Experience
+
+Design the application so essential UI and previously loaded information remain usable during poor connectivity.
+
+Implement:
+
+* PWA support where practical
+* Local caching
+* Offline status indicator
+* Retry queue for non-critical operations
+* Cached language/UI assets
+* Graceful AI API failure
+
+Never pretend an AI request succeeded when the network request failed.
+
+When AI is unavailable, show a safe fallback:
+
+> “The AI service is currently unavailable. If you have severe or worsening symptoms, seek medical care immediately.”
+
+---
+
+# 5. TECHNOLOGY REQUIREMENTS
+
+Use the following technology stack.
+
+## Frontend
+
+* React.js
+* TypeScript
+* Tailwind CSS
+* React Router
+* Modern component architecture
+* Responsive mobile-first design
+
+## Backend
+
+* Node.js
+* Express.js
+* TypeScript
+
+## Database
+
+* PostgreSQL
+* Replit Postgres-compatible architecture
+
+Use parameterized SQL queries.
+
+## AI
+
+Use:
+
+* `@google/genai`
+
+The Gemini API key MUST remain server-side.
+
+Never expose the API key in browser JavaScript.
+
+## Validation
+
+Use:
+
+* Zod
+
+All external input must be validated.
+
+## Maps
+
+Implement a provider abstraction supporting:
+
+* OpenStreetMap
+* Google Maps
+
+## Voice
+
+Support:
+
+* Browser Speech Recognition where available
+* Text-to-Speech where available
+
+Structure the code so another speech provider can be integrated later.
+
+---
+
+# 6. APPLICATION PAGES / ROUTES
+
+Create the following routes.
+
+## Public
+
+`/`
+
+Landing page.
+
+Include:
+
+* Product name
+* Short explanation
+* Multilingual support
+* Emergency disclaimer
+* Start assessment CTA
+* Privacy explanation
+
+---
+
+`/language`
+
+Language selection.
+
+Supported:
+
+* English
+* Hindi
+* Marathi
+
+Persist language preference locally.
+
+---
+
+`/auth`
+
+Authentication page.
+
+Support:
+
+* Sign up
+* Login
+* Logout
+* Password reset if supported by chosen authentication implementation
+
+---
+
+## Authenticated
+
+`/dashboard`
+
+Dashboard showing:
+
+* Start health assessment
+* Recent assessments
+* Reminders
+* Nearby healthcare
+* Health summary
+* Emergency help
+
+---
+
+`/assistant`
+
+Main multilingual AI health assistant.
+
+Features:
+
+* Chat
+* Voice input
+* Text-to-speech
+* Symptom assessment
+* Language switching
+* Emergency escalation
+
+---
+
+`/assessment`
+
+Structured symptom assessment.
+
+Use adaptive questions.
+
+---
+
+`/risk-result`
+
+Display:
+
+* Risk category
+* Explanation
+* Recommended next step
+* Warning signs
+* Nearby facility CTA
+* Generate doctor summary CTA
+
+Emergency results must receive the highest visual priority.
+
+---
+
+`/facilities`
+
+Healthcare facility finder.
+
+Include:
+
+* List
+* Map
+* Filters
+* Facility type
+* Distance
+* Navigation
+
+---
+
+`/summary`
+
+Doctor-ready health summary.
+
+Actions:
+
+* Copy
+* Download
+* Share where explicitly supported
+* Start new assessment
+
+---
+
+`/reminders`
+
+Medication and appointment reminders.
+
+---
+
+`/profile`
+
+User profile.
+
+Include:
+
+* Basic demographics
+* Preferred language
+* Emergency contact
+* Relevant patient-reported conditions
+* Allergies
+* Accessibility preferences
+
+---
+
+`/privacy`
+
+Explain:
+
+* What data is collected
+* Why it is collected
+* How it is protected
+* AI limitations
+* User rights
+
+---
+
+# 7. USER FLOW
+
+Implement the following primary journey.
+
+### STEP 1
+
+User opens SwasthyaSaathi.
+
+### STEP 2
+
+User selects:
+
+* Hindi
+* English
+* Marathi
+
+### STEP 3
+
+User chooses:
+
+**“Check my symptoms”**
+
+### STEP 4
+
+System asks:
+
+> “What are you experiencing?”
+
+User may:
+
+* Type
+* Speak
+
+### STEP 5
+
+AI extracts structured symptom information.
+
+### STEP 6
+
+System asks only relevant follow-up questions.
+
+### STEP 7
+
+Deterministic safety engine checks emergency indicators.
+
+### STEP 8
+
+AI generates a structured assessment.
+
+### STEP 9
+
+Show risk category.
+
+### STEP 10
+
+If emergency:
+
+Immediately show:
+
+* Emergency warning
+* Seek immediate medical care
+* Nearby emergency facility
+* Emergency contact action where configured
+
+### STEP 11
+
+If medium risk:
+
+Show:
+
+* Prompt healthcare consultation
+* Appropriate facility options
+* Warning signs
+* Doctor summary
+
+### STEP 12
+
+If low risk:
+
+Show:
+
+* General guidance
+* Monitoring advice
+* When to seek medical care
+* Optional facility lookup
+
+### STEP 13
+
+User can generate a doctor summary.
+
+### STEP 14
+
+User can create a follow-up reminder.
+
+---
+
+# 8. TARGET DOMAINS & CATEGORIZATION
+
+Organize healthcare information into safe categories.
+
+## General Symptoms
+
+* Fever
+* Cough
+* Cold
+* Headache
+* Stomach discomfort
+* Vomiting
+* Diarrhea
+* Body pain
+* Fatigue
+
+## Respiratory
+
+* Cough
+* Breathlessness
+* Wheezing
+* Chest discomfort
+
+## Cardiovascular Warning Signs
+
+* Chest pressure/pain
+* Fainting
+* Severe breathlessness
+* Sudden weakness
+
+## Neurological Warning Signs
+
+* Sudden weakness
+* Facial drooping
+* Speech difficulty
+* Seizure
+* Severe confusion
+
+## Maternal Health
+
+* Pregnancy
+* Bleeding
+* Severe abdominal pain
+* Severe headache
+* Vision changes
+* Reduced fetal movement where relevant
+
+## Pediatric
+
+Create age-aware questioning.
+
+Do not use adult assumptions for children.
+
+## Elderly
+
+Use simplified UI and caregiver support.
+
+## Chronic Conditions
+
+* Diabetes
+* Hypertension
+* Asthma
+
+These categories must only support guidance/referral and not diagnosis.
+
+---
+
+# 9. FORM & ADVISORY CONFIGURATION
+
+Create reusable configuration-driven forms.
+
+Each question should support:
+
+```ts
+{
+  id: string;
+  category: string;
+  question: string;
+  type: "text" | "number" | "select" | "multiselect" | "boolean" | "voice";
+  required: boolean;
+  options?: string[];
+  condition?: string;
+}
+```
+
+Question logic must be configurable.
+
+Example:
+
+If:
+
+`pregnant === true`
+
+then show pregnancy-specific questions.
+
+If:
+
+`age < 18`
+
+then use pediatric logic.
+
+If:
+
+`chestPain === true`
+
+then trigger relevant emergency screening questions.
+
+---
+
+# 10. DATABASE SCHEMA
+
+Create production-ready PostgreSQL schema.
+
+## users
+
+```sql
+CREATE TABLE users (
+  id UUID PRIMARY KEY,
+  email TEXT UNIQUE,
+  password_hash TEXT,
+  preferred_language TEXT NOT NULL DEFAULT 'en',
+  age INTEGER,
+  sex TEXT,
+  emergency_contact_name TEXT,
+  emergency_contact_phone TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```
+
+## patient_profiles
+
+```sql
+CREATE TABLE patient_profiles (
+  id UUID PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  pregnancy_status TEXT,
+  allergies TEXT[],
+  chronic_conditions TEXT[],
+  current_medications TEXT[],
+  accessibility_preferences JSONB DEFAULT '{}',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```
+
+## assessments
+
+```sql
+CREATE TABLE assessments (
+  id UUID PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  language TEXT NOT NULL,
+  chief_complaint TEXT,
+  symptom_data JSONB NOT NULL DEFAULT '{}',
+  risk_level TEXT NOT NULL,
+  risk_reasons JSONB NOT NULL DEFAULT '[]',
+  red_flags JSONB NOT NULL DEFAULT '[]',
+  recommended_action TEXT,
+  ai_summary TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```
+
+## assessment_messages
+
+```sql
+CREATE TABLE assessment_messages (
+  id UUID PRIMARY KEY,
+  assessment_id UUID NOT NULL REFERENCES assessments(id) ON DELETE CASCADE,
+  role TEXT NOT NULL CHECK (role IN ('user', 'assistant', 'system')),
+  content TEXT NOT NULL,
+  language TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```
+
+## reminders
+
+```sql
+CREATE TABLE reminders (
+  id UUID PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  type TEXT NOT NULL,
+  dosage TEXT,
+  schedule JSONB NOT NULL,
+  start_date DATE,
+  end_date DATE,
+  notes TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```
+
+## facilities
+
+```sql
+CREATE TABLE facilities (
+  id UUID PRIMARY KEY,
+  name TEXT NOT NULL,
+  type TEXT NOT NULL,
+  address TEXT,
+  latitude DOUBLE PRECISION,
+  longitude DOUBLE PRECISION,
+  phone TEXT,
+  opening_hours JSONB,
+  emergency_available BOOLEAN,
+  source TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```
+
+## doctor_summaries
+
+```sql
+CREATE TABLE doctor_summaries (
+  id UUID PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  assessment_id UUID REFERENCES assessments(id) ON DELETE SET NULL,
+  summary JSONB NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```
+
+Add indexes for:
+
+* user_id
+* assessment_id
+* created_at
+* facility coordinates where supported
+
+Use UUIDs for primary identifiers.
+
+---
+
+# 11. ROW LEVEL SECURITY / DATA ISOLATION RULES
+
+Patient information is highly sensitive.
+
+Implement strict user-level data isolation.
+
+A user must only be able to access:
+
+* Their own profile
+* Their own assessments
+* Their own messages
+* Their own reminders
+* Their own doctor summaries
+
+Users must never be able to access another patient's information by changing an ID in a URL or request.
+
+Backend authorization must NOT rely only on frontend route protection.
+
+Every protected API endpoint must verify authenticated ownership.
+
+Never expose:
+
+* Password hashes
+* Internal API keys
+* AI provider credentials
+* Sensitive internal logs
+
+Use server-side authorization middleware.
+
+---
+
+# 12. BACKEND API ROUTES
+
+Implement:
+
+## Authentication
+
+`POST /api/auth/register`
+
+`POST /api/auth/login`
+
+`POST /api/auth/logout`
+
+`GET /api/auth/me`
+
+---
+
+## Patient Profile
+
+`GET /api/profile`
+
+`PUT /api/profile`
+
+---
+
+## Assessments
+
+`POST /api/assessments`
+
+`GET /api/assessments`
+
+`GET /api/assessments/:id`
+
+`DELETE /api/assessments/:id`
+
+---
+
+## AI Assistant
+
+`POST /api/ai/chat`
+
+`POST /api/ai/analyze-symptoms`
+
+`POST /api/ai/generate-summary`
+
+---
+
+## Facilities
+
+`GET /api/facilities/nearby`
+
+`GET /api/facilities/:id`
+
+---
+
+## Reminders
+
+`GET /api/reminders`
+
+`POST /api/reminders`
+
+`PUT /api/reminders/:id`
+
+`DELETE /api/reminders/:id`
+
+---
+
+## Health
+
+`GET /api/health`
+
+Return:
+
+```json
+{
+  "status": "ok"
+}
+```
+
+Do not expose infrastructure secrets.
+
+---
+
+# 13. GEMINI SDK SETUP & SERVER-SIDE SECURITY
+
+Use the official `@google/genai` SDK.
+
+The AI client must be initialized only on the server.
+
+Example architecture:
+
+```ts
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY
+});
+```
+
+Never place:
+
+`GEMINI_API_KEY`
+
+inside frontend environment variables.
+
+Never expose it through:
+
+* React code
+* Browser network payloads
+* HTML
+* localStorage
+* public configuration
+
+Use environment variables.
+
+Add:
+
+* Request timeout
+* Error handling
+* Rate limiting
+* Input length limits
+* Output validation
+* Retry logic only where safe
+
+---
+
+# 14. AI SYSTEM PROMPT
+
+Use the following system-level behavior for the healthcare assistant:
+
+```text
+You are SwasthyaSaathi, a multilingual healthcare guidance assistant.
+
+Your role is to help users understand their reported symptoms, identify potential warning signs, and decide what level of healthcare attention may be appropriate.
+
+You are NOT a doctor.
+
+You must NOT diagnose diseases.
+
+You must NOT claim certainty about a medical condition.
+
+You must NOT prescribe medications.
+
+You must NOT change medication doses.
+
+You must NOT tell users to stop prescribed medication.
+
+You must NOT replace emergency services or healthcare professionals.
+
+Your priorities are:
+
+1. Detect possible emergencies.
+2. Ask only relevant safety questions.
+3. Provide clear next-step guidance.
+4. Recommend professional medical evaluation when appropriate.
+5. Communicate uncertainty honestly.
+6. Respond in the user's selected language.
+7. Never invent patient information.
+8. Never invent medical history.
+9. Never invent healthcare facilities.
+10. Never hide uncertainty.
+
+If emergency warning signs are present, prioritize emergency guidance over conversational completeness.
+
+If information is insufficient, say what information is missing.
+
+When appropriate, recommend seeking care at a nearby healthcare facility.
+
+Do not provide dangerous treatment instructions.
+
+All generated outputs must conform to the requested JSON schema.
+```
+
+---
+
+# 15. DETAILED AI PROMPTS WITH REQUIRED JSON SCHEMAS
+
+## 15.1 Symptom Extraction
+
+Prompt:
+
+```text
+Extract structured symptom information from the patient's message.
+
+Do not diagnose.
+
+Return only valid JSON.
+```
+
+Schema:
+
+```json
+{
+  "chief_complaint": "string",
+  "symptoms": [
+    {
+      "name": "string",
+      "duration": "string|null",
+      "severity": "mild|moderate|severe|unknown",
+      "location": "string|null"
+    }
+  ],
+  "associated_symptoms": [],
+  "possible_red_flags": [],
+  "missing_information": []
+}
+```
+
+---
+
+## 15.2 Risk Assessment
+
+Return:
+
+```json
+{
+  "risk_level": "low|medium|emergency",
+  "red_flags": [],
+  "reasoning_summary": "string",
+  "recommended_action": "string",
+  "seek_emergency_care": true,
+  "follow_up_questions": []
+}
+```
+
+The AI must not output a disease diagnosis.
+
+---
+
+## 15.3 Doctor Summary
+
+Return:
+
+```json
+{
+  "patient": {
+    "age": "number|null",
+    "sex": "string|null"
+  },
+  "chief_complaint": "string",
+  "symptoms": [],
+  "duration": "string|null",
+  "severity": "string|null",
+  "associated_symptoms": [],
+  "medical_history": [],
+  "medications": [],
+  "allergies": [],
+  "pregnancy_status": "string|null",
+  "red_flags": [],
+  "risk_level": "low|medium|emergency",
+  "recommended_next_step": "string",
+  "unknown_information": []
+}
+```
+
+Every field must reflect available user-provided information.
+
+---
+
+## 15.4 Multilingual Response
+
+The assistant must:
+
+* Preserve medical meaning.
+* Use simple language.
+* Avoid unnecessary medical jargon.
+* Prefer familiar terms.
+* Explain unavoidable medical terms.
+
+For rural users, prioritize understandable language over technical vocabulary.
+
+---
+
+# 16. ZOD VALIDATION REQUIREMENTS
+
+Create Zod schemas for every API input and AI output.
+
+Examples:
+
+```ts
+const RiskLevelSchema = z.enum([
+  "low",
+  "medium",
+  "emergency"
+]);
+```
+
+Validate:
+
+* Request bodies
+* Query parameters
+* Route parameters
+* AI outputs
+* Database-bound objects
+
+Never trust AI-generated JSON without validation.
+
+If AI output fails validation:
+
+1. Log a safe internal error.
+2. Do not expose raw provider output.
+3. Attempt a safe retry if appropriate.
+4. Otherwise return a conservative fallback.
+
+---
+
+# 17. FRONTEND COMPONENTS LIST
+
+Create reusable components.
+
+## Navigation
+
+* Header
+* Sidebar
+* MobileNavigation
+* LanguageSelector
+* UserMenu
+
+## Healthcare
+
+* SymptomInput
+* VoiceInputButton
+* ChatMessage
+* AssessmentQuestion
+* ProgressIndicator
+* RiskCard
+* EmergencyAlert
+* WarningSignsList
+* CareRecommendation
+* DoctorSummaryCard
+* FacilityCard
+* FacilityMap
+* ReminderCard
+
+## Accessibility
+
+* FontSizeControl
+* HighContrastMode
+* ScreenReaderLabels
+* VoicePlaybackButton
+
+## Forms
+
+* TextField
+* SelectField
+* MultiSelect
+* DatePicker
+* TimePicker
+* FormError
+
+## General
+
+* LoadingState
+* ErrorState
+* EmptyState
+* OfflineBanner
+* ConfirmationDialog
+* Toast
+
+---
+
+# 18. SECURITY REQUIREMENTS
+
+Treat healthcare information as sensitive.
+
+Implement:
+
+* HTTPS-ready architecture
+* Secure authentication
+* Password hashing
+* HttpOnly cookies where session cookies are used
+* CSRF protection where applicable
+* Rate limiting
+* Input validation
+* Output validation
+* SQL injection prevention
+* XSS protection
+* Authorization middleware
+* Secure headers
+* Request size limits
+* AI prompt injection defenses
+* Audit-friendly server logging
+
+Do not log sensitive patient conversations unnecessarily.
+
+Never log:
+
+* Passwords
+* API keys
+* Full patient records
+* Authentication tokens
+
+AI prompt injection defenses:
+
+Treat patient-provided text as untrusted input.
+
+The user must never be able to override system-level safety instructions by writing things such as:
+
+“Ignore your medical safety rules.”
+
+---
+
+# 19. ENVIRONMENT VARIABLES TEMPLATE
+
+Create `.env.example`:
+
+```env
+DATABASE_URL=
+
+GEMINI_API_KEY=
+
+SESSION_SECRET=
+
+MAPS_PROVIDER=
+GOOGLE_MAPS_API_KEY=
+
+OPENSTREETMAP_BASE_URL=
+
+NODE_ENV=development
+
+PORT=5000
+```
+
+Never commit `.env`.
+
+Create a `.gitignore` containing:
+
+```text
+.env
+.env.local
+node_modules
+dist
+build
+```
+
+---
+
+# 20. SUGGESTED FOLDER STRUCTURE
+
+Use:
+
+```text
+swasthyasaathi/
+│
+├── client/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── hooks/
+│   │   ├── services/
+│   │   ├── lib/
+│   │   ├── types/
+│   │   ├── i18n/
+│   │   └── App.tsx
+│   │
+│   └── index.html
+│
+├── server/
+│   ├── routes/
+│   ├── controllers/
+│   ├── services/
+│   ├── middleware/
+│   ├── ai/
+│   ├── safety/
+│   ├── facilities/
+│   ├── auth/
+│   ├── validators/
+│   ├── db/
+│   └── index.ts
+│
+├── shared/
+│   ├── schemas/
+│   ├── types/
+│   └── constants/
+│
+├── migrations/
+│
+├── public/
+│
+├── .env.example
+├── package.json
+├── README.md
+└── tsconfig.json
+```
+
+Keep healthcare safety logic separate from UI code.
+
+---
+
+# 21. IMPLEMENTATION PHASES
+
+## PHASE 1 — Project Setup
+
+Implement:
+
+* React
+* TypeScript
+* Express
+* Tailwind
+* PostgreSQL
+* Routing
+* Environment configuration
+
+Ensure the application starts successfully.
+
+---
+
+## PHASE 2 — Authentication
+
+Implement:
+
+* Registration
+* Login
+* Logout
+* Session management
+* Protected routes
+* Authorization
+
+---
+
+## PHASE 3 — Database
+
+Create:
+
+* Tables
+* Foreign keys
+* Indexes
+* Constraints
+* Migrations
+
+Test CRUD operations.
+
+---
+
+## PHASE 4 — Core UI
+
+Build:
+
+* Landing page
+* Dashboard
+* Language selection
+* Profile
+* Assistant
+* Assessment
+* Risk result
+* Facilities
+* Summary
+* Reminders
+
+Prioritize mobile usability.
+
+---
+
+## PHASE 5 — Healthcare Safety Engine
+
+Implement deterministic red-flag detection.
+
+The safety engine must execute independently of the LLM.
+
+Test:
+
+* Emergency scenarios
+* Medium-risk scenarios
+* Low-risk scenarios
+* Missing-information scenarios
+
+---
+
+## PHASE 6 — Gemini Integration
+
+Implement:
+
+* Symptom extraction
+* Follow-up question generation
+* Structured risk assessment
+* Multilingual response
+* Doctor summary
+
+Validate every AI response with Zod.
+
+---
+
+## PHASE 7 — Voice
+
+Implement:
+
+* Speech-to-text
+* Text-to-speech
+* Language-aware speech
+* Voice error handling
+
+Provide a text fallback whenever voice is unavailable.
+
+---
+
+## PHASE 8 — Facility Finder
+
+Implement:
+
+* Nearby search
+* Facility cards
+* Map
+* Navigation
+* Facility categories
+* Emergency facility prioritization
+
+Never fabricate facility data.
+
+---
+
+## PHASE 9 — Reminders
+
+Implement:
+
+* Medication reminders
+* Appointment reminders
+* Follow-up reminders
+
+Do not make medical decisions based on reminders.
+
+---
+
+## PHASE 10 — Offline Experience
+
+Implement:
+
+* PWA capabilities
+* Local caching
+* Offline indicator
+* Graceful API failure
+* Retry behavior
+
+---
+
+## PHASE 11 — Security Review
+
+Test:
+
+* Unauthorized access
+* ID manipulation
+* Invalid input
+* Prompt injection
+* SQL injection
+* XSS
+* Rate limiting
+* Sensitive logging
+
+---
+
+## PHASE 12 — Demo Optimization
+
+Create a polished hackathon demo flow.
+
+The demo should take approximately 2–3 minutes.
+
+Recommended demo:
+
+1. Open SwasthyaSaathi.
+2. Select Hindi.
+3. Click “Check Symptoms”.
+4. Speak a symptom.
+5. AI asks relevant questions.
+6. Show emergency/medium/low risk result.
+7. Show nearby PHC/hospital.
+8. Generate doctor summary.
+9. Create follow-up reminder.
+10. Demonstrate privacy/safety controls.
+
+---
+
+# 22. ACCEPTANCE CRITERIA
+
+The application is complete only when all of the following are satisfied.
+
+## Product
+
+* [ ] Application has polished responsive UI.
+* [ ] Mobile layout works.
+* [ ] Hindi works.
+* [ ] English works.
+* [ ] Marathi works.
+* [ ] Voice input works where browser-supported.
+* [ ] Text-to-speech works where browser-supported.
+* [ ] Offline state is handled.
+* [ ] Error states are handled.
+
+## Healthcare Safety
+
+* [ ] No diagnosis claims.
+* [ ] No medication prescribing.
+* [ ] No medication dose modification.
+* [ ] Emergency red flags have deterministic detection.
+* [ ] Emergency result overrides normal conversational flow.
+* [ ] Uncertainty is clearly communicated.
+* [ ] Patient-provided information is not fabricated.
+* [ ] AI limitations are visible.
+
+## AI
+
+* [ ] Gemini integration works server-side.
+* [ ] Structured outputs are used.
+* [ ] Zod validates AI responses.
+* [ ] Invalid AI responses are handled safely.
+* [ ] Prompt injection defenses exist.
+* [ ] Multilingual responses work.
+
+## Backend
+
+* [ ] Authentication works.
+* [ ] Authorization works.
+* [ ] Users can access only their own data.
+* [ ] API validation exists.
+* [ ] Rate limiting exists.
+* [ ] Error handling exists.
+
+## Database
+
+* [ ] PostgreSQL schema works.
+* [ ] Foreign keys work.
+* [ ] Indexes exist.
+* [ ] Patient data is isolated.
+
+## Facilities
+
+* [ ] Facility search works.
+* [ ] Map/list UI works.
+* [ ] Navigation action works.
+* [ ] Emergency facilities can be prioritized.
+* [ ] No facility information is fabricated.
+
+## Doctor Summary
+
+* [ ] Summary is generated from known information.
+* [ ] Unknown information is clearly identified.
+* [ ] Summary can be copied/downloaded.
+* [ ] AI-generated disclaimer is present.
+
+## Demo
+
+The complete application must support this demo scenario:
+
+> A rural user selects Hindi, speaks about a health problem, answers a few simple questions, receives a safety-focused urgency assessment, sees an appropriate nearby healthcare facility, and generates a concise doctor-ready summary.
+
+---
+
+# 23. FINAL INSTRUCTION TO THE CODING AGENT
+
+Build the complete **SwasthyaSaathi** application now.
+
+Do not merely create a prototype screen.
+
+Do not stop after generating the UI.
+
+Implement the complete:
+
+**Frontend + Backend + PostgreSQL + Authentication + AI + Safety Engine + Voice + Facility Finder + Doctor Summary + Reminders + Validation + Security + Offline Experience**
+
+Use clean, modular, maintainable TypeScript.
+
+Use production-quality error handling.
+
+Use realistic demo data where external APIs are unavailable, but clearly label demo data and never present it as real healthcare information.
+
+Do not fabricate real hospitals, doctors, ambulance numbers, medical claims, or patient information.
+
+If a third-party API is unavailable, create a clean provider abstraction and safe fallback rather than breaking the application.
+
+The application must be designed around the principle:
+
+> **AI assists healthcare access; it does not replace healthcare professionals.**
+
+Before finishing:
+
+1. Run the application.
+2. Verify all routes.
+3. Verify database connectivity.
+4. Verify API endpoints.
+5. Verify AI JSON validation.
+6. Verify emergency scenarios.
+7. Verify multilingual UI.
+8. Verify mobile responsiveness.
+9. Verify unauthorized data access is blocked.
+10. Verify environment variables are not exposed.
+11. Fix all TypeScript/build/runtime errors.
+12. Ensure the README contains complete setup and deployment instructions.
+
+The final result must be a polished, hackathon-ready healthcare product that can be demonstrated live in front of judges.
+
+## PRIMARY HACKATHON PITCH
+
+Use this product positioning throughout the application:
+
+> **“SwasthyaSaathi is an offline-friendly, multilingual AI health assistant that helps rural users understand symptoms, identify possible emergencies, and reach the right healthcare facility — without claiming to replace a doctor.”**
+
+## DESIGN PRINCIPLE
+
+Build for a real rural user, not for a developer.
+
+The interface should be:
+
+* Simple
+* Trustworthy
+* Voice-friendly
+* Large and readable
+* Multilingual
+* Low-bandwidth friendly
+* Accessible
+* Safety-first
+
+Avoid unnecessary animations, complicated dashboards, technical terminology, and excessive form fields.
+
+The most important user action should always be obvious:
+
+**“Tell us what you are experiencing.”**

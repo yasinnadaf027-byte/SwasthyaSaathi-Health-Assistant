@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "SwasthyaSaathi"
+description = "A multilingual, offline-friendly rural health assistant that helps people describe symptoms, recognize possible warning signs, find appropriate care, and prepare a doctor-ready summary without replacing a healthcare professional."
+version = "1.0.0"
+id = "artifacts/swasthyasaathi"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20322
+
+[services.development]
+run = "pnpm --filter @workspace/swasthyasaathi run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/swasthyasaathi", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/swasthyasaathi/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20322"
+BASE_PATH = "/"

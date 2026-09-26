@@ -1,6 +1,6 @@
-# [Project name]
+# Swasth Saathi
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Swasth Saathi helps rural users describe symptoms in their own language, recognize possible warning signs, and take a safer next step without replacing a healthcare professional.
 
 ## Run & Operate
 
@@ -22,23 +22,30 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/swasthyasaathi` — React/Vite web app and all user-facing routes
+- `artifacts/api-server/src/routes/swasthyasaathi.ts` — safety analysis, summaries, profile, assessments, reminders, and facility endpoints
+- `lib/api-spec/openapi.yaml` — API contract source of truth
+- `lib/db/src/schema/swasthyasaathi.ts` — PostgreSQL schema
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Deterministic red-flag screening runs before optional Gemini enrichment and can override ordinary AI responses.
+- AI is server-side only; the browser never receives the Gemini key.
+- Facility entries are explicitly labeled demo data until a verified map provider is connected.
+- The first build uses a demo user so the complete assessment journey is usable while managed authentication is not configured.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+Swasth Saathi supports English, Hindi, and Marathi; guided symptom intake; browser voice input and playback; risk-focused results; doctor-ready summaries; configurable reminders; accessible profile preferences; nearby facility discovery; and privacy/safety education.
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- The visible product name is “Swasth Saathi”.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Emergency guidance must remain deterministic and must not be downgraded by an AI response.
+- Demo facility data must not be presented as verified healthcare information.
 
 ## Pointers
 
